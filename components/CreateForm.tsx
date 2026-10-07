@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { LOCATIONS, VIBES, nextHalfHour, type Vibe } from "@/lib/sessions";
 
-export type NewSession = { course: string; location: string; vibe: Vibe; startTime: string };
+export type NewSession = { course: string; location: string; vibe: Vibe; startTime: string; host?: string };
 
-type Errors = Partial<Record<"course" | "location" | "customLocation" | "vibe" | "startTime", string>>;
+type Errors = Partial<Record<"course" | "location" | "customLocation" | "vibe" | "startTime" | "host", string>>;
 
 const inputClass =
   "w-full rounded-2xl border border-line bg-paper px-4 py-3 text-base outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-4 focus:ring-brand/10";
@@ -16,6 +16,7 @@ export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSe
   const [customLocation, setCustomLocation] = useState("");
   const [vibe, setVibe] = useState<Vibe | "">("");
   const [startTime, setStartTime] = useState(nextHalfHour);
+  const [host, setHost] = useState("");
   const [errors, setErrors] = useState<Errors>({});
 
   function validate(): Errors {
@@ -26,6 +27,7 @@ export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSe
     if (location === "Other" && !customLocation.trim()) e.customLocation = "Tell people where to find you.";
     if (!vibe) e.vibe = "Choose a vibe.";
     if (!startTime) e.startTime = "Pick a start time.";
+    if (host.trim().length > 20) e.host = "Keep it under 20 characters.";
     return e;
   }
 
@@ -40,12 +42,14 @@ export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSe
       location: location === "Other" ? customLocation.trim() : location,
       vibe: vibe as Vibe,
       startTime,
+      host: host.trim() || undefined,
     });
 
     // Reset the form for next time.
     setCourse("");
     setLocation("");
     setCustomLocation("");
+    setHost("");
     setVibe("");
     setStartTime(nextHalfHour());
   }
@@ -112,6 +116,7 @@ export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSe
               >
                 <span className="block text-lg">{v.emoji}</span>
                 {v.label}
+                <span className="mt-1 block text-xs font-normal leading-snug text-muted">{v.tagline}</span>
               </button>
             ))}
           </div>
@@ -123,13 +128,21 @@ export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSe
           <input id="startTime" type="time" className={inputClass} value={startTime} onChange={(e) => setStartTime(e.target.value)} />
           {err(errors.startTime)}
         </div>
+
+        <div>
+          <label htmlFor="host" className="mb-1.5 block text-sm font-semibold">
+            Your first name <span className="font-normal text-muted">(optional)</span>
+          </label>
+          <input id="host" className={inputClass} placeholder="So people know who to look for" value={host} onChange={(e) => setHost(e.target.value)} />
+          {err(errors.host)}
+        </div>
       </div>
 
       <button
         type="submit"
         className="mt-7 w-full rounded-full bg-brand px-6 py-3.5 text-base font-semibold text-white shadow-[0_6px_18px_rgba(65,54,245,0.3)] transition hover:bg-brand-dark active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       >
-        Create Study Spot
+        Start Study Spot
       </button>
     </form>
   );

@@ -6,6 +6,7 @@
   --color-card: #ffffff;
   --color-ink: #16162a;
   --color-muted: #6b6b80;
+  --color-sand: #f3ecdf;
   --color-line: #ece6da;
   --color-brand: #4136f5;
   --color-brand-dark: #3027d0;
@@ -36,11 +37,15 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
 body {
-  /* Warm off-white with faint peach and lavender glows for a little life. */
+  /* Warm off-white with one soft glow for a little life. */
   background:
     radial-gradient(60rem 30rem at 10% -10%, rgba(255, 196, 150, 0.28), transparent 60%),
-    radial-gradient(50rem 28rem at 100% 0%, rgba(160, 150, 255, 0.2), transparent 60%),
     var(--color-paper);
   background-attachment: fixed;
   color: var(--color-ink);
