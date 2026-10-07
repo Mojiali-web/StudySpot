@@ -1,3 +1,4 @@
+import { JoinCelebration, VibeArt } from "@/components/illustrations";
 import { describePeople, formatTime, getVibe, type Session } from "@/lib/sessions";
 
 // Each vibe gets its own color: a top accent bar, a chip, and a hover tint.
@@ -62,23 +63,34 @@ export default function SessionCard({ session, joined, isNew, justJoined, onJoin
 
       <div className="flex items-center justify-between gap-3">
         <span className={`rounded-full px-3 py-1 text-sm font-semibold ${style.chip}`}>
-          {vibe.emoji} {vibe.label}
+          {vibe.label}
         </span>
         <span className="text-sm font-bold">{formatTime(session.startTime)}</span>
       </div>
 
-      <h3 className="mt-4 text-3xl font-extrabold tracking-tight">{session.course}</h3>
-      <p className="mt-1 text-sm text-muted">
-        Hosted by {hostLabel}
-        {session.id.startsWith("seed-") && <span className="ml-2 rounded-full bg-sand px-2 py-0.5 text-xs">sample</span>}
+      <div className="mt-3 flex items-end justify-between gap-2">
+        <div className="min-w-0">
+          <h3 className="text-3xl font-extrabold tracking-tight">{session.course}</h3>
+          <p className="mt-1 text-sm text-muted">
+            Hosted by {hostLabel}
+            {session.id.startsWith("seed-") && <span className="ml-2 rounded-full bg-sand px-2 py-0.5 text-xs">sample</span>}
+          </p>
+        </div>
+        <VibeArt vibe={session.vibe} className="-mb-1 h-16 w-auto shrink-0" />
+      </div>
+      <p className="mt-3 flex items-center gap-1.5 font-medium">
+        <svg viewBox="0 0 24 24" className="size-4 shrink-0 text-muted" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" />
+        </svg>
+        {session.location}
       </p>
-      <p className="mt-3 font-medium">📍 {session.location}</p>
 
-      <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
+      <div className="relative mt-5 flex items-center justify-between gap-3 border-t border-line pt-4">
+        {justJoined && joined && <JoinCelebration />}
         <div className="flex min-w-0 items-center gap-3">
           <Avatars session={session} joined={joined} />
           <div className="min-w-0 text-sm leading-tight">
-            <p className="font-bold">
+            <p className="whitespace-nowrap font-bold">
               <span key={session.students} className={`inline-block ${justJoined ? "animate-bump" : ""}`}>
                 {session.students}
               </span>{" "}

@@ -1,3 +1,6 @@
+import { StoryPanel, VibeArt } from "@/components/illustrations";
+import { VIBES } from "@/lib/sessions";
+
 // Static story sections below the feed. No state, so this is a plain server component.
 
 const STEPS = [
@@ -42,12 +45,32 @@ export function WhySection() {
         StudySpot turns &ldquo;I&apos;m heading to the library&rdquo; into an open invitation.
       </p>
 
-      <ol className="mt-10 grid gap-4 md:grid-cols-3">
+      {/* The whole product in three pictures */}
+      <div className="mt-10 grid items-center gap-2 md:grid-cols-[1fr_auto_1fr_auto_1fr]">
+        {([["Studying alone", "Texting around"], ["StudySpot", "See what's nearby"], ["Together", "Same table"]] as const).map(([title, sub], i) => (
+          <div key={title} className="contents">
+            {i > 0 && <span className="hidden text-2xl text-muted md:block" aria-hidden>→</span>}
+            <figure className="rounded-3xl border border-line bg-card p-3 text-center">
+              <StoryPanel step={i as 0 | 1 | 2} className="mx-auto w-full max-w-[17rem]" />
+              <figcaption className="pb-2 pt-1 font-bold leading-tight">{title}<span className="block text-sm font-normal text-muted">{sub}</span></figcaption>
+            </figure>
+          </div>
+        ))}
+      </div>
+
+      <ol className="mt-4 grid gap-4 md:grid-cols-3">
         {STEPS.map((s, i) => (
           <li key={s.title} className="rounded-3xl border border-line bg-card p-6">
             <span className="grid size-10 place-items-center rounded-full bg-brand text-lg font-extrabold text-white">{i + 1}</span>
             <h3 className="mt-4 text-xl font-bold tracking-tight">{s.title}</h3>
             <p className="mt-1 text-muted">{s.body}</p>
+            {i === 1 && (
+              <div className="mt-3 flex gap-2">
+                {VIBES.map((v) => (
+                  <VibeArt key={v.id} vibe={v.id} className="h-14 w-auto" />
+                ))}
+              </div>
+            )}
           </li>
         ))}
       </ol>

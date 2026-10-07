@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { VibeArt } from "@/components/illustrations";
 import { LOCATIONS, VIBES, nextHalfHour, type Vibe } from "@/lib/sessions";
 
 export type NewSession = { course: string; location: string; vibe: Vibe; startTime: string; host?: string };
@@ -114,7 +115,7 @@ export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSe
                   vibe === v.id ? "border-brand bg-brand/10 text-brand" : "border-line bg-paper hover:border-ink/30"
                 }`}
               >
-                <span className="block text-lg">{v.emoji}</span>
+                <VibeArt vibe={v.id} className="mx-auto mb-1 h-14 w-auto" />
                 {v.label}
                 <span className="mt-1 block text-xs font-normal leading-snug text-muted">{v.tagline}</span>
               </button>

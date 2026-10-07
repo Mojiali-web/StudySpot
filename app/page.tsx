@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CreateForm, { type NewSession } from "@/components/CreateForm";
+import { EmptyScene, HeroScene } from "@/components/illustrations";
 import Modal from "@/components/Modal";
 import SessionCard from "@/components/SessionCard";
 import { ClosingSection, NeedSection, WhySection } from "@/components/Sections";
@@ -20,6 +21,13 @@ export default function Home() {
   const [newId, setNewId] = useState<string | null>(null); // card to animate in
   const [joinedNowId, setJoinedNowId] = useState<string | null>(null); // count to bump
   const [toast, setToast] = useState<string | null>(null);
+
+  // Let the "someone joined" celebration play, then reset it.
+  useEffect(() => {
+    if (!joinedNowId) return;
+    const t = setTimeout(() => setJoinedNowId(null), 2300);
+    return () => clearTimeout(t);
+  }, [joinedNowId]);
 
   // Hide the toast after it finishes animating.
   useEffect(() => {
@@ -58,7 +66,7 @@ export default function Home() {
 
   const filters: { id: Filter; label: string }[] = [
     { id: "all", label: "All" },
-    ...VIBES.map((v) => ({ id: v.id as Filter, label: `${v.emoji} ${v.label}` })),
+    ...VIBES.map((v) => ({ id: v.id as Filter, label: v.label })),
   ];
 
   return (
@@ -75,7 +83,7 @@ export default function Home() {
       </div>
 
       {/* Hero: text on the left, the three vibes on the right */}
-      <header className="mt-10 grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-end">
+      <header className="mt-6 grid items-center gap-6 lg:grid-cols-[1.1fr_1fr]">
         <div>
           <h1 className="text-5xl font-extrabold leading-[0.95] tracking-tighter sm:text-7xl">Don&apos;t study alone.</h1>
           <p className="mt-4 max-w-lg text-lg text-muted sm:text-xl">See who&apos;s studying around campus and join them.</p>
@@ -99,17 +107,7 @@ export default function Home() {
           </div>
         </div>
 
-        <ul className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1" aria-label="Study vibes">
-          {VIBES.map((v) => (
-            <li key={v.id} className="flex items-center gap-3 rounded-2xl border border-line bg-card/80 px-4 py-3">
-              <span className="text-2xl" aria-hidden>{v.emoji}</span>
-              <div className="leading-tight">
-                <p className="font-bold">{v.label}</p>
-                <p className="text-sm text-muted">{v.tagline}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <HeroScene className="mx-auto w-full max-w-md lg:max-w-none" />
       </header>
 
       {/* The feed is the core of the product */}
@@ -135,7 +133,8 @@ export default function Home() {
         {!ready ? (
           <p className="mt-8 text-muted">Loading study spots…</p>
         ) : visible.length === 0 ? (
-          <div className="mt-6 rounded-3xl border border-dashed border-ink/20 bg-card/60 p-10 text-center">
+          <div className="mt-6 rounded-3xl border border-dashed border-ink/20 bg-card/60 p-8 text-center">
+            <EmptyScene className="mx-auto mb-2 h-40 w-auto" />
             <p className="text-xl font-bold">No study spots here yet.</p>
             <p className="mt-1 text-muted">Maybe you should start one 👀</p>
             <button onClick={() => setFormOpen(true)} className={`${primaryBtn} mt-5`}>Start a Study Spot</button>
