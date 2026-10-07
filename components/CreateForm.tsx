@@ -10,7 +10,7 @@ type Errors = Partial<Record<"course" | "location" | "customLocation" | "vibe" |
 const inputClass =
   "w-full rounded-2xl border border-line bg-paper px-4 py-3 text-base outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-4 focus:ring-brand/10";
 
-export default function CreateForm({ onCreate }: { onCreate: (s: NewSession) => void }) {
+export default function CreateForm({ onCreate, onCancel }: { onCreate: (s: NewSession) => void; onCancel: () => void }) {
   const [course, setCourse] = useState("");
   const [location, setLocation] = useState("");
   const [customLocation, setCustomLocation] = useState("");
@@ -56,9 +56,22 @@ export default function CreateForm({ onCreate }: { onCreate: (s: NewSession) => 
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="rounded-3xl border border-line bg-card p-6 shadow-[0_4px_24px_rgba(60,40,10,0.08)] sm:p-8"
+      className="bg-card p-6 sm:p-8"
     >
-      <h2 className="text-2xl font-bold tracking-tight">Create a Study Spot</h2>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Start a Study Spot</h2>
+          <p className="mt-1 text-muted">Tell people where to find you.</p>
+        </div>
+        <button
+          type="button"
+          onClick={onCancel}
+          aria-label="Close"
+          className="-mr-2 -mt-2 grid size-9 shrink-0 place-items-center rounded-full text-xl text-muted transition hover:bg-paper hover:text-ink focus-visible:outline-2 focus-visible:outline-brand"
+        >
+          ×
+        </button>
+      </div>
 
       <div className="mt-6 space-y-5">
         <div>
